@@ -19,7 +19,6 @@ int	strcpyTester(int argCount, char **argVector)
 			printf("Original : \"%s\"\n", argVector[i]);
 			copyPtr = ft_strcpy(copy, argVector[i]);
 			printf("Copy : \"%s\"\n", copyPtr);
-			copy[ret] = '\0';
 		}
 		else
 		{
@@ -43,7 +42,6 @@ int	strcpyTester(int argCount, char **argVector)
 			{
 				copyPtr = ft_strcpy(copy, buffer);
 				printf("Copy : \"%s\"\n", copyPtr);
-				copy[len] = '\0';
 			}
 		}	
 		

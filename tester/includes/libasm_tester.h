@@ -6,5 +6,6 @@ int     strlenTester(int argCount, char **argVector);
 int     strcmpTester(int argCount, char **argVector);
 int     writeTester(int argCount, char **argVector);
 int     readTester(int argCount, char **argVector);
+int     strdupTester(int argCount, char **argVector);
 
 #endif

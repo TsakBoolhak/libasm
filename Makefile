@@ -2,16 +2,19 @@ SRCS = ft_strlen.s \
        ft_strcpy.s \
        ft_write.s \
        ft_read.s \
+	   ft_strdup.s \
        ft_strcmp.s
 
 OBJS = ${SRCS:.s=.o}
 
-ASMFLAGS = -felf64
+ASMFLAGS = -felf64 -g
+
+INCLUDES = -Iincludes
 
 ASMC = nasm
 
 %.o: %.s
-	${ASMC} ${ASMFLAGS} -o $@ -s $<
+	${ASMC} ${ASMFLAGS}  ${INCLUDES} -o $@ -s $<
 
 NAME = libasm.a
 

@@ -3,11 +3,12 @@ SRCS =	srcs/ft_strlenTester.c \
 	srcs/ft_strcmpTester.c \
 	srcs/ft_writeTester.c \
 	srcs/ft_readTester.c \
+	srcs/ft_strdupTester.c \
 	srcs/main.c
 
 OBJS = ${SRCS:.c=.o}
 
-CFLAGS = -Wall -Wextra -Wpedantic -Werror
+CFLAGS = -Wall -Wextra -Wpedantic -Werror -no-pie
 
 INCLUDES = -Iincludes
 

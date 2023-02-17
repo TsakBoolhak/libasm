@@ -3,6 +3,7 @@
 
 int main(int ac, char **av)
 {
+	strdupTester(ac, av);
 	strlenTester(ac, av);
 	strcpyTester(ac, av);
 	strcmpTester(ac, av);

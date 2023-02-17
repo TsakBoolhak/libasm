@@ -3,7 +3,8 @@
 	section .text
 ft_strcpy:
 
-.init:	mov	rax,	rdi
+.init:	push rbp
+	mov	rax,	rdi
 	mov	r11,	0
 
 .loop:	mov	r10b,	byte [rsi + r11]
@@ -13,4 +14,5 @@ ft_strcpy:
         inc	r11
 	jmp	.loop
 
-.end:	ret
+.end: pop rbp
+ret

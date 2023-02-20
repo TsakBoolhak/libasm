@@ -8,7 +8,7 @@ SRCS =	srcs/ft_strlenTester.c \
 
 OBJS = ${SRCS:.c=.o}
 
-CFLAGS = -Wall -Wextra -Wpedantic -Werror -no-pie
+CFLAGS = -Wall -Wextra -Wpedantic -Werror
 
 INCLUDES = -Iincludes
 

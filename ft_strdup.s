@@ -12,7 +12,7 @@ call ft_strlen
 inc rax
 mov rdi, rax
 sub rsp, 8
-call malloc
+call malloc wrt ..plt
 add rsp, 8
 pop rsi
 cmp rax, 0

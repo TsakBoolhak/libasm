@@ -4,6 +4,7 @@ SRCS =	srcs/ft_strlenTester.c \
 	srcs/ft_writeTester.c \
 	srcs/ft_readTester.c \
 	srcs/ft_strdupTester.c \
+	srcs/ft_atoiBaseTester.c \
 	srcs/main.c
 
 OBJS = ${SRCS:.c=.o}

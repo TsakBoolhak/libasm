@@ -9,5 +9,6 @@ int main(int ac, char **av)
 	strcmpTester(ac, av);
 	writeTester(ac, av);
 	readTester(ac, av);
+	atoiBaseTester(ac, av);
 	return 0;
 }

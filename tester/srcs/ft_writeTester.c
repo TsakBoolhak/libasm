@@ -11,12 +11,12 @@
 
 int	writeTester(int argc, char **argv)
 {
-	int	ret;
-	ssize_t	status;
+	ssize_t	ret;
 	char	buffer[4096] = {0};
-	int	fdTest;
-	int	fdReal;
+	int		fdTest;
+	int		fdReal;
 
+	puts("TESTING WRITE");
 	fdTest = open("ft_write.output", O_CREAT | O_WRONLY, S_IRWXU | S_IRWXG | S_IRWXO);
 	if (!fdTest)
 	{
@@ -35,9 +35,9 @@ int	writeTester(int argc, char **argv)
 	}
 	for (int i = 1; i < argc; ++i)
 	{
-		status = ft_write(1, argv[i], strlen(argv[i]));
+		ret = ft_write(1, argv[i], strlen(argv[i]));
 		fflush(stdout);
-		printf("\nret = %ld\n", status);
+		printf("\nret = %ld\n", ret);
 		ft_write(fdTest, argv[i], strlen(argv[i]));
 		write(fdReal, argv[i], strlen(argv[i]));
 	}
@@ -57,14 +57,40 @@ int	writeTester(int argc, char **argv)
 			{
 				write(1, "\n", 1);
 			}
-			status = ft_write(1, buffer, strlen(buffer));
+			ret = ft_write(1, buffer, strlen(buffer));
 			fflush(stdout);
-			printf("\nret = %ld\n", status);
+			printf("\nret = %ld\n", ret);
 			ft_write(fdTest, buffer, strlen(buffer));
 			write(fdReal, buffer, strlen(buffer));
 		}
 	} while (ret > 0);
 	close(fdTest);
 	close(fdReal);
+	errno = 0;
+	ret = write(33, buffer, 4095);
+	printf("failed call, REAL ret = %ld\n", ret);
+	perror("REAL perror: ");
+	errno = 0;
+	ret = ft_write(33, buffer, 4095);
+	printf("failed call, MINE ret = %ld\n", ret);
+	perror("MINE perror: ");
+	fdTest = open("/dev/full", O_WRONLY);
+	if (fdTest)
+	{
+		errno = 0;
+		ret = write(fdTest, "this will fail", 15);
+		printf("failed call, REAL ret = %ld\n", ret);
+		perror("REAL perror: ");
+		close(fdTest);
+	}
+	fdTest = open("/dev/full", O_WRONLY);
+	if (fdTest)
+	{
+		errno = 0;
+		ret = ft_write(fdTest, "this will fail", 15);
+		printf("failed call, MINE ret = %ld\n", ret);
+		perror("MINE perror: ");
+		close(fdTest);
+	}
 	return 0;
 }

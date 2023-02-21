@@ -14,6 +14,7 @@ int	readTester(int argc, char **argv)
 	ssize_t	ret;
 	char	buffer[4096] = {0};
 	int	fd;
+	char *buf = 0;
 
 	fd = open("ft_read.output", O_CREAT | O_WRONLY, S_IRWXU | S_IRWXG | S_IRWXO);
 	if (!fd)
@@ -82,6 +83,26 @@ int	readTester(int argc, char **argv)
 		}
 		
 	} while (ret > 0);
+	close(fd);
+	errno = 0;
+	ret = read(33, buffer, 4095);
+	printf("failed call, REAL ret = %ld\n", ret);
+	perror("REAL perror: ");
+	errno = 0;
+	ret = ft_read(33, buffer, 4095);
+	printf("failed call, MINE ret = %ld\n", ret);
+	perror("MINE perror: ");
+	fd = open("ft_read.output", O_RDONLY);
+	errno = 0;
+	ret = read(fd, buf, 4095);
+	printf("failed call, REAL ret = %ld\n", ret);
+	perror("REAL perror: ");
+	close(fd);
+	fd = open("ft_read.output", O_RDONLY);
+	errno = 0;
+	ret = ft_read(fd, buf, 4095);
+	printf("failed call, MINE ret = %ld\n", ret);
+	perror("MINE perror: ");
 	close(fd);
 	return 0;
 }

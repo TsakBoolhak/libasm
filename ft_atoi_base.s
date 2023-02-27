@@ -38,16 +38,6 @@ je .wrongBase
 .endBase: pop r10
 ret
 
-.power: ; RAX : int RDI : int nb, RSI : int power
-mov rax, 1
-cmp rsi, 0
-je .endPower
-.powerLoop: mul rdi
-sub rsi, 1
-cmp rsi, 0
-jne .powerLoop
-.endPower: ret
-
 .getCharIndex: ; RAX : int RDI : char c RSI : char * base
 mov rax, -1
 .getCharIndexLoop: inc rax
@@ -59,27 +49,6 @@ jmp .getCharIndexLoop
 .getCharIndexNotFound: mov rax, -1
 .endGetCharIndex: ret
 
-.getPowerIndex: ; RAX : int RDI : char *str RSI int index RDX : char *base
-push r10
-push r11
-push rcx
-mov r10, rsi
-mov rcx, rdi
-mov rsi, rdx
-mov r11, -1
-.getPowerIndexLoop: inc r11
-mov rdi, 0
-mov dil, [rcx + r11]
-call .getCharIndex
-cmp rax, -1
-jne .getPowerIndexLoop
-mov rax, r11
-sub rax, 1
-sub rax, r10
-.endGetPowerIndex: pop rcx
-pop r11
-pop r10
-ret
 
 ft_atoi_base: ; RAX : int RDI : char *str RSI : char *base) 
 ; r10:base_nb r11:sign rcx:result r8:i r9: i + j ()
@@ -112,7 +81,7 @@ cmp byte[rdi + r8], 43
 je .computeSignLoop
 cmp byte[rdi + r8], 45
 jne .computeValue
-neg r11
+imul r11, -1
 jmp .computeSignLoop
 .computeValue: mov r9, r8
 sub r9, 1
@@ -123,27 +92,14 @@ push rdi
 mov rdi ,rax
 call .getCharIndex
 pop rdi
-
-;;debug
-;;ret
-;;debug_end
-
 cmp rax, -1
 je .atoiEnd
-push rdi
-mov rdi, [rdi + r8]
-push r9
-sub r9, r8
-push rsi
-mov rsi, r9
-pop rcx
 push rax
-call .getPowerIndex
-pop r9
-mul r9
-add rcx, r9
-pop r9
-pop rdi
+mov rax, rcx
+mul r10
+mov rcx, rax
+pop rax
+add rcx, rax
 jmp .computeValueLoop
 .atoiEnd: mov rax, rcx
 imul r11

@@ -10,5 +10,6 @@ int main(int ac, char **av)
 	writeTester(ac, av);
 	readTester(ac, av);
 	atoiBaseTester(ac, av);
+	listPushFrontTester(ac, av);
 	return 0;
 }

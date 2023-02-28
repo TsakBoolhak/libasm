@@ -30,11 +30,11 @@ pop rax
 inc rax
 jmp .loopBase
 .wrongBase: pop rax
-mov rax, 0
+.wrongBase2: mov rax, 0
 jmp .endBase
 .returnBase: pop rax
 cmp rax, 1
-je .wrongBase 
+je .wrongBase2 
 .endBase: pop r10
 ret
 

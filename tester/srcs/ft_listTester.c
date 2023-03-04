@@ -48,6 +48,7 @@ int	listPushFrontTester(int argCount, char **argVector) {
         printf("node #%zu data = %d\n", i, *((int *)(node->data)));
         node = node->next;
     }
+    printf("list size = %d\n", ft_list_size(myList));
     lstFree(&myList);
     free(arr2);
     return 0;

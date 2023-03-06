@@ -6,11 +6,12 @@ SRCS = ft_strlen.s \
 	   ft_atoi_base.s \
 	   ft_list_push_front.s \
 	   ft_list_size.s \
+	   ft_list_remove_if.s \
        ft_strcmp.s
 
 OBJS = ${SRCS:.s=.o}
 
-ASMFLAGS = -felf64 -g
+ASMFLAGS = -felf64 -gDwarf
 
 INCLUDES = -Iincludes
 

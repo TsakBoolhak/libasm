@@ -22,7 +22,7 @@ mov r8, rdi             ;store begin_list into r8
 mov r9, 0               ;set prev to NULL
 mov r10, [rdi]          ;set curr to *begin_list
 
-.mainLoop :
+.mainLoop:
 cmp r10, 0
 je .endRemoveIf         ;parsed whole list
 mov r11, [r10 + 8]      ;store curr->next
@@ -95,7 +95,7 @@ jmp .lastStep           ;as we freed curr, prev stay untouched
 .noRemove:
 mov r9, r10             ;no remove were done so we store curr as prev before last step
 .lastStep:
-mov r10, r11            ;we set curr to curr_>next
+mov r10, r11            ;we set curr to curr->next
 jmp .mainLoop
 .endRemoveIf :
 ret

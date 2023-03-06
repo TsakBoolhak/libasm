@@ -63,7 +63,15 @@ int	listPushFrontTester(int argCount, char **argVector) {
     }
     printf("list size = %d\n", ft_list_size(myList));
     int data = 42;
-    printf("&data = %p\n", (void *)&data);
+    ft_list_remove_if(&myList, &data, &cmpData, &free);
+    printf("after ft_list_remove_if(&myList, &data, &cmpData, &free); (should remove all the data containing 42) : \n");
+    node = myList;
+    for (size_t i = 1; node != NULL; ++i) {
+        printf("node #%zu data = %d (adress = %p) (data adresss = %p) (next address = %p)\n", i, *((int *)(node->data)), (void *)node, node->data, (void *)node->next);
+        node = node->next;
+    }
+    printf("list size = %d\n", ft_list_size(myList));
+    data = 101010;
     ft_list_remove_if(&myList, &data, &cmpData, &free);
     printf("after ft_list_remove_if(&myList, &data, &cmpData, &free); (should remove all the data containing 42) : \n");
     node = myList;

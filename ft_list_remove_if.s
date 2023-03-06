@@ -28,6 +28,7 @@ je .endRemoveIf         ;parsed whole list
 mov r11, [r10 + 8]      ;store curr->next
 mov rdi, [r10]          ;set curr->data as first arg
 
+push rdi
 push rsi
 push rdx
 push rcx
@@ -43,6 +44,7 @@ pop r8
 pop rcx
 pop rdx
 pop rsi
+pop rdi
 
 cmp rax, 0
 jne .noRemove           ;no remove to do

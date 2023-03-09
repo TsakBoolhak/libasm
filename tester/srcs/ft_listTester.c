@@ -56,6 +56,7 @@ int	listPushFrontTester(int argCount, char **argVector) {
             exit(4);
         }
     }
+    ft_list_sort(&myList, cmpData);
     t_list *node = myList;
     for (size_t i = 1; node != NULL; ++i) {
         printf("node #%zu data = %d (adress = %p) (data adresss = %p) (next address = %p)\n", i, *((int *)(node->data)), (void *)node, node->data, (void *)node->next);

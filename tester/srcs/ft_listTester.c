@@ -15,7 +15,13 @@ void    lstFree(t_list **lst, void (*free_fct)(void *)) {
 
 int cmpData(void *data1, void *data2) {
     // printf("comparing %d and %d\n", *((int *)(data1)) , *((int *)(data2)) );
-    return *((int *)(data1)) != *((int *)(data2));
+    int nb1 = *((int *)(data1));
+    int nb2 = *((int *)(data2));
+    if (nb1 < nb2)
+        return -1;
+    else if (nb1 == nb2)
+        return 0;
+    return 1;
 }
 
 int	listPushFrontTester(int argCount, char **argVector) {
@@ -56,8 +62,14 @@ int	listPushFrontTester(int argCount, char **argVector) {
             exit(4);
         }
     }
-    ft_list_sort(&myList, cmpData);
     t_list *node = myList;
+    for (size_t i = 1; node != NULL; ++i) {
+        printf("node #%zu data = %d (adress = %p) (data adresss = %p) (next address = %p)\n", i, *((int *)(node->data)), (void *)node, node->data, (void *)node->next);
+        node = node->next;
+    }
+    puts("NOW LET'S SORT!!");
+    ft_list_sort(&myList, &cmpData);
+    node = myList;
     for (size_t i = 1; node != NULL; ++i) {
         printf("node #%zu data = %d (adress = %p) (data adresss = %p) (next address = %p)\n", i, *((int *)(node->data)), (void *)node, node->data, (void *)node->next);
         node = node->next;

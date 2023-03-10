@@ -25,7 +25,9 @@ int cmpData(void *data1, void *data2) {
 }
 
 int	listPushFrontTester(int argCount, char **argVector) {
-    int arr[] = {-2147483648, 42, 2147483647, 42, 0, 42, -42, 42, 1, 42, 101, 42, 101010};
+    // int arr[] = {-2147483648, 42, 2147483647, 42, 0, 42, -42, 42, 1, 42, 101, 42, 101010};
+    int arr[] = {43, 41, 42, 44};
+
     t_list *myList = NULL;
 
     for (int i = 1; i < argCount; ++i){
@@ -86,7 +88,7 @@ int	listPushFrontTester(int argCount, char **argVector) {
     printf("list size = %d\n", ft_list_size(myList));
     data = 101010;
     ft_list_remove_if(&myList, &data, &cmpData, &free);
-    printf("after ft_list_remove_if(&myList, &data, &cmpData, &free); (should remove all the data containing 42) : \n");
+    printf("after ft_list_remove_if(&myList, &data, &cmpData, &free); (should remove all the data containing 101010) : \n");
     node = myList;
     for (size_t i = 1; node != NULL; ++i) {
         printf("node #%zu data = %d (adress = %p) (data adresss = %p) (next address = %p)\n", i, *((int *)(node->data)), (void *)node, node->data, (void *)node->next);

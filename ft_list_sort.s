@@ -21,23 +21,41 @@ mov r11, [r11 + 8]
 mov [rsp + 24], r11 ; [rsp + 24] => currNext
 mov [rsp + 32], r11 ; [rsp + 32] => toCheck
 mov r11, [r11 + 8]
-mov [rsp + 48], r10; [rsp + 48] => toCheckNext
+mov [rsp + 48], r11; [rsp + 48] => toCheckNext
 mov [rsp + 56], rsi ; [rsp + 56] => cmp func
+
+mov rdi, [rsp + 8] ;rdi curr ; [rsp + 8] => curr (BECOME toCheck)
+mov rsi, [rsp + 24] ;rsi currNext ; [rsp + 24] => currNext
+mov rdx, [rsp + 16] ;rdx currPrev ;  [rsp + 16] => currPrev
+mov r9, [rsp + 32] ;r9 toCheck ; [rsp + 32] => toCheck   (BECOME curr)
+mov r10, [rsp + 48] ;r10 toCheckNext ; [rsp + 48] => toCheckNext 
+mov r11, [rsp + 40] ;r11 toCheckPrev ; [rsp + 40] => toCheckPrev
+
 
 .outterLoop:
 cmp qword[rsp + 8], 0 ;curr == NULL
 je .sortEnd
+
 mov r11, [rsp + 8]
 mov qword[rsp + 40], r11 ; assign curr to toCheckPrev
 mov r11, [r11 + 8]
 mov qword[rsp + 24], r11  ; set currNext
+
 cmp r11, 0
 je .sortEnd
 mov qword[rsp + 32], r11 ; assign curr->next to toCheck
 
+mov rdi, [rsp + 8] ;rdi curr ; [rsp + 8] => curr
+mov rsi, [rsp + 24] ;rsi currNext ; [rsp + 24] => currNext
+mov rdx, [rsp + 16] ;rdx currPrev ;  [rsp + 16] => currPrev
+mov r9, [rsp + 32] ;r9 toCheck ; [rsp + 32] => toCheck
+mov r10, [rsp + 48] ;r10 toCheckNext ; [rsp + 48] => toCheckNext
+mov r11, [rsp + 40] ;r11 toCheckPrev ; [rsp + 40] => toCheckPrev
+
 .innerLoop:
 cmp qword[rsp + 32], 0
 je .endOutterLoop
+;je .outterLoop
 mov r11, [rsp + 32]
 mov r11, [r11 + 8]
 mov [rsp + 48], r11 ;assign toCheck->next to toCheckNext
@@ -49,37 +67,83 @@ mov rsi, [r11]
 call r10
 .b: cmp eax, 0
 jle .skipSwap
-.swap: mov rdi, [rsp + 8] ;rdi curr ; [rsp + 8] => curr (BECOME toCheck)
+
+mov rdi, [rsp + 8] ;rdi curr ; [rsp + 8] => curr
 mov rsi, [rsp + 24] ;rsi currNext ; [rsp + 24] => currNext
 mov rdx, [rsp + 16] ;rdx currPrev ;  [rsp + 16] => currPrev
-mov r9, [rsp + 32] ;r9 toCheck ; [rsp + 32] => toCheck   (BECOME curr)
-mov r10, [rsp + 48] ;r10 toCheckNext ; [rsp + 48] => toCheckNext 
+mov r9, [rsp + 32] ;r9 toCheck ; [rsp + 32] => toCheck
+mov r10, [rsp + 48] ;r10 toCheckNext ; [rsp + 48] => toCheckNext
 mov r11, [rsp + 40] ;r11 toCheckPrev ; [rsp + 40] => toCheckPrev
-mov [rdi + 8], r10 ; assign toCheckNext to curr->next
-mov [r9 + 8], rsi ; assign currNext to toCheck->next
-mov [r11 + 8], rdi ; assign curr to toCheckPrev->next
+
+.swap:
+
 cmp rdx, 0
 jne .validPrev
 mov r8, [rsp] ;begin_list
 mov [r8], r9 ;assign toCheck to *begin_list
-mov [rsp], r9 ; update rsp
-jmp .lastSwapStep
+jmp .nextStep
 .validPrev:
-mov [rdx + 8], r9 ;assign toCheck to currPrev->next
-.lastSwapStep:
-mov [rsp + 8], r9 ; update rsp + 8 (new curr)
-mov [rsp + 32], rdi ; update rsp + 32 (new toCheck)
+mov qword[rdx + 8], r9 ; CurP->next = swap
+.nextStep:
+mov [r11 + 8], rdi
+mov [r9 + 8], rsi
+mov [rdi + 8], r10
+
+cmp r11, rdi
+jne .otherStep
+
+mov [rsi + 8], rdi
+
+.otherStep:
+mov qword[rsp + 8], r9 ; update rsp + 8 (new curr)
+mov r8, [r9 + 8]
+mov qword[rsp + 24], r8
+mov qword[rsp + 32], rdi ; update rsp + 32 (new toCheck)
+
+mov rdi, [rsp + 8] ;rdi curr ; [rsp + 8] => curr
+mov rsi, [rsp + 24] ;rsi currNext ; [rsp + 24] => currNext
+mov rdx, [rsp + 16] ;rdx currPrev ;  [rsp + 16] => currPrev
+mov r9, [rsp + 32] ;r9 toCheck ; [rsp + 32] => toCheck
+mov r10, [rsp + 48] ;r10 toCheckNext ; [rsp + 48] => toCheckNext
+mov r11, [rsp + 40] ;r11 toCheckPrev ; [rsp + 40] => toCheckPrev
+
 .skipSwap:
-mov r11, [rsp + 48]
+mov r11, [rsp + 32]
+mov qword[rsp + 40], r11
+mov r11, [r11 + 8]
 mov qword[rsp + 32], r11
 jmp .innerLoop
+
+mov rdi, [rsp + 8] ;rdi curr ; [rsp + 8] => curr
+mov rsi, [rsp + 24] ;rsi currNext ; [rsp + 24] => currNext
+mov rdx, [rsp + 16] ;rdx currPrev ;  [rsp + 16] => currPrev
+mov r9, [rsp + 32] ;r9 toCheck ; [rsp + 32] => toCheck
+mov r10, [rsp + 48] ;r10 toCheckNext ; [rsp + 48] => toCheckNext
+mov r11, [rsp + 40] ;r11 toCheckPrev ; [rsp + 40] => toCheckPrev
 
 .endOutterLoop:
 mov r11, [rsp + 8]
 mov qword[rsp + 16], r11 ;assign curr to currPrev
-mov r11, [rsp + 24]
-mov qword[rsp + 8], r11 ; assign curr->next to curr
+mov r10, [r11 + 8]
+mov qword[rsp + 8], r10 ; assign curr->next to curr
+.bpoint:
+
+mov rdi, [rsp + 8] ;rdi curr ; [rsp + 8] => curr
+mov rsi, [rsp + 24] ;rsi currNext ; [rsp + 24] => currNext
+mov rdx, [rsp + 16] ;rdx currPrev ;  [rsp + 16] => currPrev
+mov r9, [rsp + 32] ;r9 toCheck ; [rsp + 32] => toCheck
+mov r10, [rsp + 48] ;r10 toCheckNext ; [rsp + 48] => toCheckNext
+mov r11, [rsp + 40] ;r11 toCheckPrev ; [rsp + 40] => toCheckPrev
+
 jmp .outterLoop
+
+mov rdi, [rsp + 8] ;rdi curr ; [rsp + 8] => curr
+mov rsi, [rsp + 24] ;rsi currNext ; [rsp + 24] => currNext
+mov rdx, [rsp + 16] ;rdx currPrev ;  [rsp + 16] => currPrev
+mov r9, [rsp + 32] ;r9 toCheck ; [rsp + 32] => toCheck
+mov r10, [rsp + 48] ;r10 toCheckNext ; [rsp + 48] => toCheckNext
+mov r11, [rsp + 40] ;r11 toCheckPrev ; [rsp + 40] => toCheckPrev
+
 .sortEnd:
 add rsp, 64 ; deallocating space
 .sortRet :

@@ -13,7 +13,10 @@ cmp qword[rdi + 8], 0 ; list only has 1 element, no need to sort
 je .sortRet
 
 .init:
-sub rsp, 80 ; allocating spaces for 10 pointers
+push rbp
+push rbx
+push rsp
+sub rsp, 64 ; allocating spaces for 8 pointers
 mov r11, [rdi]
 mov [rsp], rdi ; [rsp] => begin_list
 mov [rsp + 8], r11 ; [rsp + 8] => curr
@@ -25,8 +28,6 @@ mov [rsp + 32], r11 ; [rsp + 32] => toCheck
 mov r11, [r11 + 8]
 mov [rsp + 48], r11; [rsp + 48] => toCheckNext
 mov [rsp + 56], rsi ; [rsp + 56] => cmp func
-mov [rsp + 64], r8
-mov [rsp + 72], r9
 
 .outterLoop:
 cmp qword[rsp + 8], 0 ;curr == NULL
@@ -50,10 +51,9 @@ mov rdi, [r11]
 mov r11, [rsp + 32]
 mov rsi, [r11]
 mov r11, [rsp + 56]
-mov r8, [rsp + 64]
-mov r9, [rsp + 72]
 xor rax, rax
 call r11
+jmp .sortEnd
 cmp eax, 0
 jle .skipSwap
 
@@ -102,7 +102,10 @@ mov qword[rsp + 8], r10 ; assign curr->next to curr
 jmp .outterLoop
 
 .sortEnd:
-add rsp, 80 ; deallocating space
+add rsp, 64 ; deallocating space
+pop rsp
+pop rbx
+pop rbp
 
 .sortRet :
 ret

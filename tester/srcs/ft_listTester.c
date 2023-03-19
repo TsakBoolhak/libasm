@@ -16,7 +16,7 @@ void    lstFree(t_list **lst, void (*free_fct)(void *)) {
 int cmpData(void *data1, void *data2) {
     int nb1 = *((int *)(data1));
     int nb2 = *((int *)(data2));
-    // printf("comparing %d and %d\n", 4, 5);
+    printf("comparing %d and %d\n", nb1, nb2);
     if (nb1 < nb2)
         return -1;
     else if (nb1 == nb2)

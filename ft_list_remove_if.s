@@ -14,6 +14,9 @@ section .text
 
 
 ft_list_remove_if:
+push rbp
+push rbx
+push rsp
 cmp rdi, 0
 je .endRemoveIf         ;begin_list is NULL
 cmp rdx, 0
@@ -100,4 +103,7 @@ mov r9, r10             ;no remove were done so we store curr as prev before las
 mov r10, r11            ;we set curr to curr->next
 jmp .mainLoop
 .endRemoveIf :
+pop rsp
+pop rbx
+pop rbp
 ret

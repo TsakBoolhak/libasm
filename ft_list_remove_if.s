@@ -10,9 +10,6 @@ extern free
 ; R11: next (t_list *)
 section .text
 
-
-
-
 ft_list_remove_if:
 push rbp
 push rbx

@@ -53,7 +53,6 @@ mov rsi, [r11]
 mov r11, [rsp + 56]
 xor rax, rax
 call r11
-jmp .sortEnd
 cmp eax, 0
 jle .skipSwap
 

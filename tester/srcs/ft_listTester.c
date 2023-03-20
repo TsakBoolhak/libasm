@@ -26,7 +26,6 @@ int cmpData(void *data1, void *data2) {
 
 int	listPushFrontTester(int argCount, char **argVector) {
     int arr[] = {-2147483648, 42, 2147483647, 42, 0, 42, -42, 42, 1, 42, 101, 42, 101010};
-    // int arr[] = {43, 41, 42, 44};
 
     t_list *myList = NULL;
 
@@ -39,13 +38,7 @@ int	listPushFrontTester(int argCount, char **argVector) {
             exit(1);
         }
         *ptr = atoi(argVector[i]);
-        t_list *node = ft_list_push_front(&myList, ptr);
-        if (!node)
-        {
-            puts("list Push Front failed");
-            lstFree(&myList, &free);
-            exit(2);
-        }
+        ft_list_push_front(&myList, ptr);
     }
     for (size_t i = 0; i < sizeof(arr) / sizeof(int); ++i) {
         int *ptr = malloc(sizeof(int));
@@ -56,13 +49,7 @@ int	listPushFrontTester(int argCount, char **argVector) {
             exit(3);
         }
         *ptr = arr[i];
-        t_list *node = ft_list_push_front(&myList, ptr);
-        if (!node)
-        {
-            puts("list Push Front failed");
-            lstFree(&myList, &free);
-            exit(4);
-        }
+        ft_list_push_front(&myList, ptr);
     }
     t_list *node = myList;
     for (size_t i = 1; node != NULL; ++i) {

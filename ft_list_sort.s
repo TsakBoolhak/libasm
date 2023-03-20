@@ -1,6 +1,5 @@
-global ft_list_sort
-
-;void ft_list_sort(t_list **begin_list, int (*cmp)())
+            global ft_list_sort
+            ;void ft_list_sort(t_list **begin_list, int (*cmp)())
 ;*begin_list, curr, currPrev, currNext, toCheck, toCheckPrev, toCheckNext 
 
 ft_list_sort:

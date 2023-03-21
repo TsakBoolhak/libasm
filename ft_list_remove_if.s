@@ -1,106 +1,76 @@
-global ft_list_remove_if
-extern free
+            global ft_list_remove_if
+            ;void ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *))
+            ;rdi => begin_list    rsi => data_ref    rdx => cmp    rcx => free_fct
 
-; void ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *))
-; RDI begin_list    RSI data_ref    RDX cmp    RCX free_fct
-; avalaible RAX, R8, R9, R10, R11
-; R8: keep track of begin list (t_list **)
-; R9: prev (t_list *)
-; R10: curr (t_list *)
-; R11: next (t_list *)
-section .text
+            ;typedef struct  s_list
+            ;{
+            ;   void            *data;
+            ;   struct s_list   *next;
+            ;}
 
-ft_list_remove_if:
-push rbp
-push rbx
-push rsp
-cmp rdi, 0
-je .endRemoveIf         ;begin_list is NULL
-cmp rdx, 0
-je .endRemoveIf         ;cmp function ptr is NULL
-mov r8, rdi             ;store begin_list into r8
-mov r9, 0               ;set prev to NULL
-mov r10, [rdi]          ;set curr to *begin_list
+            extern free
+
+            section .text
+
+    ft_list_remove_if:
+.initRemoveIf:
+            sub rsp,    56                      ;allocate enough space for 7 pointers (and align stack)
+            cmp rdi,    0                       ;check if begin_list is NULL
+            je  .endRemoveIf                    ;if so we do nothing
+            cmp rdx,    0                       ;check if compare function is NULL
+            je  .endRemoveIf                    ;if so we do nothing
+            mov qword[rsp], rdi                 ;[rsp] => begin_list
+            mov qword[rsp + 8], rsi             ;[rsp + 8] => data_ref
+            mov qword[rsp + 16],    rdx         ;[rsp + 16] => compare function
+            mov qword[rsp + 24],    rcx         ;[rsp + 24] => free function
+            mov qword[rsp + 32],    0           ;[rsp + 32] => prev node
+            mov r8, [rdi]                       ;we stor *begin_list in a register to do the next instruction
+            mov qword[rsp + 40],    r8          ;[rsp + 40] => current node (start at *begin_list)
 
 .mainLoop:
-cmp r10, 0
-je .endRemoveIf         ;parsed whole list
-mov r11, [r10 + 8]      ;store curr->next
-mov rdi, [r10]          ;set curr->data as first arg
-
-push rdi
-push rsi
-push rdx
-push rcx
-push r8
-push r9
-push r10
-push r11
-call rdx                ;call cmp function (data_ref is alrdy placed as second arg)
-pop r11
-pop r10
-pop r9
-pop r8
-pop rcx
-pop rdx
-pop rsi
-pop rdi
-
-cmp rax, 0
-jne .noRemove           ;no remove to do
-cmp rcx, 0
-je .skipFreeFct         ;no free function provided
-
-push rsi
-push rdx
-push rcx
-push r8
-push r9
-push r10
-push r11
-call rcx                ;call free_fct (curr->data is alrdy placed as first arg)
-pop r11
-pop r10
-pop r9
-pop r8
-pop rcx
-pop rdx
-pop rsi
+            cmp qword[rsp + 40],    0           ;check if current node is NULL
+            je  .endRemoveIf                    ;if so that means we parsed whole list
+            mov r8, [rsp + 40]                  ;store current into r8
+            mov rdi,    [r8]                    ;set curr->data as first arg
+            mov r8, [r8 + 8]                    ;to store curr->next into r8 for the next instruction
+            mov qword[rsp + 48],    r8          ;[rsp + 48] => curr->next
+            mov rsi,    [rsp + 8]               ;set data_ref as second argument
+            call    qword[rsp + 16]             ;call cmp function
+            cmp rax,    0                       ;check the return of compare function
+            jne .noRemove                       ;if it returns a non zero value the node is not to be removed
+            cmp qword[rsp + 24],    0           ;check if a free function were provided to handle the node's data
+            je  .skipFreeFct                    ;no free function were provided so we don't handle the data
+            mov r8, [rsp + 40]                  ;store current into r8
+            mov rdi,    [r8]                    ;set curr->data as first arg
+            call    [rsp + 24]                  ;call free_fct to handle the removal of data
 
 .skipFreeFct:
-cmp r9, 0
-jne .validPrev          ;there is a valid prev node
-mov [r8], r11           ;otherwise we set *begin_list to curr->next
-jmp .freeCurr
+            cmp qword[rsp + 32],    0           ;check if prev is NULL
+            jne .validPrev                      ;if not there is a valid prev node
+            mov r8, [rsp]                       ;otherwise we move begin_list into a register
+            mov r9, [rsp + 48]                  ;and curr->next into another
+            mov [r8],   r9                      ;to set *begin_list as curr->next
+            jmp .freeCurr                       ;before continuing to free step
+
 .validPrev:
-mov [r9 + 8], r11       ;we set prev->next to curr->next
+            mov r8, [rsp + 32]                  ;we move prev into r8 to access prev->next
+            mov r9, [rsp + 48]                  ;we move curr->next into r9
+            mov [r8 + 8], r9                    ;we set prev->next to curr->next
+
 .freeCurr:
-mov rdi, r10            ;we set curr as first argument
+            mov rdi,    [rsp + 40]              ;we set current node as first argument
+            call    free wrt ..plt              ;we free current node
+            jmp .lastStep                       ;as we freed curr, prev stay untouched so we skip the step that actualise it in our stack
 
-push rsi
-push rdx
-push rcx
-push r8
-push r9
-push r10
-push r11
-call free wrt ..plt     ;we free curr
-pop r11
-pop r10
-pop r9
-pop r8
-pop rcx
-pop rdx
-pop rsi
-
-jmp .lastStep           ;as we freed curr, prev stay untouched
 .noRemove:
-mov r9, r10             ;no remove were done so we store curr as prev before last step
+            mov r8, [rsp + 40]                  ;we move current node into r8 for next instruction
+            mov [rsp + 32], r8                  ;no remove were done so we store curr as prev before last step
+
 .lastStep:
-mov r10, r11            ;we set curr to curr->next
-jmp .mainLoop
-.endRemoveIf :
-pop rsp
-pop rbx
-pop rbp
-ret
+            mov r8, [rsp + 48]                  ;we move curr->next into r8 for next step
+            mov [rsp + 40], r8                  ;we set curr to curr->next
+            jmp .mainLoop                       ;and continue to loop through the list
+
+.endRemoveIf:
+            add rsp,    56                      ;deallocating space we used before exiting the function
+            ret

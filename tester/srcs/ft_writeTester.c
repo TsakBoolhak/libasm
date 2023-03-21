@@ -16,7 +16,7 @@ int	writeTester(int argc, char **argv)
 	int		fdTest;
 	int		fdReal;
 
-	puts("TESTING WRITE");
+	puts("ENTERING WRITE TESTER");
 	fdTest = open("ft_write.output", O_CREAT | O_WRONLY, S_IRWXU | S_IRWXG | S_IRWXO);
 	if (!fdTest)
 	{
@@ -66,12 +66,13 @@ int	writeTester(int argc, char **argv)
 	} while (ret > 0);
 	close(fdTest);
 	close(fdReal);
+	puts("now let's check if errno is set correctly with two tests that will make write call fail");
 	errno = 0;
-	ret = write(33, buffer, 4095);
+	ret = write(-1, buffer, 4095);
 	printf("failed call, REAL ret = %ld\n", ret);
 	perror("REAL perror: ");
 	errno = 0;
-	ret = ft_write(33, buffer, 4095);
+	ret = ft_write(-1, buffer, 4095);
 	printf("failed call, MINE ret = %ld\n", ret);
 	perror("MINE perror: ");
 	fdTest = open("/dev/full", O_WRONLY);

@@ -16,6 +16,7 @@ int	readTester(int argc, char **argv)
 	int	fd;
 	char *buf = 0;
 
+	puts("ENTERING READ TESTER");
 	fd = open("ft_read.output", O_CREAT | O_WRONLY, S_IRWXU | S_IRWXG | S_IRWXO);
 	if (!fd)
 	{
@@ -84,12 +85,13 @@ int	readTester(int argc, char **argv)
 		
 	} while (ret > 0);
 	close(fd);
+	puts("now let's check if errno is set correctly with two tests that will make read call fail");
 	errno = 0;
-	ret = read(33, buffer, 4095);
+	ret = read(-1, buffer, 4095);
 	printf("failed call, REAL ret = %ld\n", ret);
 	perror("REAL perror: ");
 	errno = 0;
-	ret = ft_read(33, buffer, 4095);
+	ret = ft_read(-1, buffer, 4095);
 	printf("failed call, MINE ret = %ld\n", ret);
 	perror("MINE perror: ");
 	fd = open("ft_read.output", O_RDONLY);

@@ -11,6 +11,7 @@ int	strcpyTester(int argCount, char **argVector)
 	char	copy[4096] = {0};
 	char	*copyPtr = buffer;
 
+	puts("ENTERING STRCPY TESTER");
 	for (int i = 1; i < argCount; ++i)
 	{
 		ret = strlen(argVector[i]);

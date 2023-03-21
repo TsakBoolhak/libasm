@@ -12,6 +12,7 @@ int	strdupTester(int argCount, char **argVector)
 	// ssize_t copy;
 	char	*copy;
 
+	puts("ENTERING STRDUP TESTER");
 	for (int i = 1; i < argCount; ++i)
 	{
 			printf("Original : \"%s\"\n", argVector[i]);

@@ -12,7 +12,7 @@ OBJS = ${SRCS:.c=.o}
 
 CFLAGS = -Wall -Wextra -Wpedantic -Werror -g3
 
-INCLUDES = -Iincludes
+INCLUDES = -Iincludes -I../includes
 
 CC = gcc
 

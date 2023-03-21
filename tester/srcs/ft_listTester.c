@@ -16,7 +16,6 @@ void    lstFree(t_list **lst, void (*free_fct)(void *)) {
 int cmpData(void *data1, void *data2) {
     int nb1 = *((int *)(data1));
     int nb2 = *((int *)(data2));
-    printf("comparing %d and %d\n", nb1, nb2);
     if (nb1 < nb2)
         return -1;
     else if (nb1 == nb2)
@@ -24,11 +23,11 @@ int cmpData(void *data1, void *data2) {
     return 1;
 }
 
-int	listPushFrontTester(int argCount, char **argVector) {
+int	listTester(int argCount, char **argVector) {
     int arr[] = {-2147483648, 42, 2147483647, 42, 0, 42, -42, 42, 1, 42, 101, 42, 101010};
-
     t_list *myList = NULL;
 
+    puts("ENTERING LIST TESTER");
     for (int i = 1; i < argCount; ++i){
         int *ptr = malloc(sizeof(int));
         if (!ptr)

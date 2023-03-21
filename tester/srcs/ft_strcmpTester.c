@@ -11,6 +11,7 @@ int	strcmpTester(int argc, char **argv)
 	char	copy[4096] = {0};
 	char	*activeBuf = buffer;
 
+	puts("ENTERING STRCMP TESTER");
 	for (int i = 1; i + 1 < argc; ++i)
 	{
 		ret = ft_strcmp(argv[i], argv[i + 1]);
@@ -22,7 +23,7 @@ int	strcmpTester(int argc, char **argv)
 		printf("Input: ");
 		fflush(stdout);
 		ret = read(0, activeBuf, 4095);
-	       	if (ret >= 0)
+	    if (ret >= 0)
 		{
 			activeBuf[ret] = '\0';
 			if (ret > 0 && activeBuf[ret - 1] == '\n')

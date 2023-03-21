@@ -8,6 +8,7 @@ int	strlenTester(int argCount, char **argVector)
 	int	ret;
 	char	buffer[4096] = {0};
 
+	puts("ENTERING STRLEN TESTER");
 	for (int i = 1; i < argCount; ++i)
 	{
 		printf("\"%s\" => length %zu\n", argVector[i], ft_strlen(argVector[i]));

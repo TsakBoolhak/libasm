@@ -10,6 +10,7 @@ int	atoiBaseTester(int argCount, char **argVector)
 	char	buffer[4096] = {0};
 	char	copy[4096] = {0};
 
+	puts("ENTERING ATOI BASE TESTER");
 	for (int i = 1; i + 1 < argCount; i += 2)
 	{
 		printf("atoi_base(%s, %s) = %d\n", argVector[i], argVector[i + 1], ft_atoi_base(argVector[i], argVector[i + 1]));

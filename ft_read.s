@@ -6,6 +6,7 @@
 
 			section	.text
 
+
 	ft_read:
 .init:
 			push	rbp							;realign stack and save stack frame

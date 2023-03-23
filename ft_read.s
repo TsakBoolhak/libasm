@@ -1,8 +1,8 @@
-			extern __errno_location
-
 			global	ft_read
 			;ssize_t     ft_read(int fd, void *buf, size_t count)
 			;rdi => fd , rsi => buf , rdx => count
+
+			extern __errno_location
 
 			section	.text
 

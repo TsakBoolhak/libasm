@@ -34,6 +34,7 @@
             jl  .computeSign            ;if its below then its not a whitspace so its time for the compute sign loop
             cmp r9b, 13                 ;we compare the char with 13
             jg  .computeSign            ;if its greater its not a whitespace so its time for the compute sign loop
+
 .continueSkip:
             inc r8                      ;increment i
             mov r9b,     [rcx + r8]     ;store str[i] into r9b
@@ -47,6 +48,7 @@
             cmp r9b, 45                 ;check if current char is -
             jne .computeValueInit       ;if it is not then we can start computing value
             xor dword[rsp + 32],    1   ;otherwise we inverse sign (1 mean positive, 0 mean negative)
+
 .continueComputeSign:
             inc r8                      ;increment i
             mov r9b, [rcx + r8]         ;store str[i] into r9b
@@ -77,10 +79,10 @@
             cmp byte[rsp + 32], 1       ;check if sign is positive
             je .atoiRet                 ;if so we return result
             imul eax,   -1              ;otherwise we inverse eax
+
 .atoiRet:
             add rsp,    40              ;set back the stack into its original state 
             ret
-
 
     .check_base: ; RAX : int RDI : char* base
 .initcheckBase:
@@ -103,7 +105,8 @@
             jmp .wrongBase              ;else the char is a whitespace and therefore the base is invalid
 
 .innerLoopBaseInit:
-            mov r8, rax                 ;inner loop gonna check for duplicates, no need to parsse alrdy checked chars so we set our r8 (j) to rax (i)
+            mov r8, rax                 ;inner loop gonna check for duplicates, no need to parse alrdy checked chars so we set our r8 (j) to rax (i)
+
 .innerLoopBase:
             inc r8                      ;we increment r8
             cmp r9b, [rdi + r8]         ;check if base[rax] == base[r8]
@@ -120,6 +123,7 @@
 .returnBase:
             cmp rax, 1                  ;check if base is of length 1
             je .wrongBase               ;if so the base is invalid
+
 .endBase:
             ret
 

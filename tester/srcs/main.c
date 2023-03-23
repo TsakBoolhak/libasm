@@ -21,11 +21,11 @@ int main(int ac, char **av)
 	writeTester(ac, av);
 	puts("");
 	readTester(ac, av);
-	#ifdef BONUS
+#ifdef BONUS
 	puts("");
 	atoiBaseTester(ac, av);
 	puts("");
 	listTester(ac, av);
-	#endif
+#endif
 	return 0;
 }
